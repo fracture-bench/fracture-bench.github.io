@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Fracture-Bench Playground</title>
+  <meta name="description" content="Compare FNO, DeepONet and Latent DeepONet predictions with finite-element results on held-out phase-field fracture test cases.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='4' fill='%230D1F45'/%3E%3Ctext x='16' y='22' font-size='18' text-anchor='middle' fill='white' font-family='serif'%3E%CF%95%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+  <script src="assets/site.js" defer></script>
+  <script src="assets/viewer.js" defer></script>
+</head>
+<body>
+  <header class="site-nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="./"><span class="mark"><span>ϕ</span></span><span>Fracture-Bench</span></a>
+      <nav class="nav-links" aria-label="Site">
+        <a href="./">Home</a>
+        <a href="./#about" class="nav-extra">About</a>
+        <a href="./#resources" class="nav-extra">Datasets &amp; code</a>
+        <a href="playground.html" aria-current="page">Playground</a>
+        <a href="./#team" class="nav-extra">Team</a>
+        <a href="#contact" class="nav-extra">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="page-head">
+    <div class="wrap-narrow">
+      <p class="kicker">Fracture-Bench</p>
+      <h1>About the datasets &amp; playground</h1>
+      <p class="page-sub">Pick a test case · Compare surrogates · Inspect FEM error</p>
+    </div>
+  </section>
+
+  <main class="wrap-narrow">
+    <p class="pg-copy">Choose a dataset and one of its held-out test cases, then compare the trained surrogates side by side with the finite-element (FEM) result and a <strong>pixel-wise error map</strong>.</p>
+
+    <div class="tabs" role="tablist" aria-label="Playground sections">
+      <button class="tab" role="tab" id="tab-overview" aria-controls="panel-overview" data-tab="overview">Overview</button>
+      <button class="tab" role="tab" id="tab-dataset1" aria-controls="panel-dataset1" data-tab="dataset1">Dataset 1 : Perforated plate of hyperelastic material</button>
+      <button class="tab" role="tab" id="tab-dataset2" aria-controls="panel-dataset2" data-tab="dataset2">Dataset 2 : Heterogeneous plate with two inclusions</button>
+    </div>
+
+    <!-- ============================================================ Overview -->
+    <section id="panel-overview" role="tabpanel" aria-labelledby="tab-overview">
+      <div class="box accent">
+        <p>Phase-field models are the method of choice for simulating fracture (crack nucleation, propagation, branching and coalescence) within a single variational framework. But each quasi-static simulation is expensive, which makes ensemble workflows such as uncertainty quantification, Bayesian inference and design optimization intractable.</p>
+        <p><b>Fracture-Bench</b> is a benchmark suite that evaluates machine-learning surrogates which replace the finite-element solve with a single network forward pass. Five architectures (UNet, FNO, DeepONet, Latent DeepONet and a conditional denoising diffusion model) are trained on identical data splits and scored with common test metrics across <b>two high-fidelity datasets</b> that differ in phase-field formulation, material heterogeneity and prediction task.</p>
+        <p>Evaluation spans accuracy, computational efficiency and generalization to load steps withheld during training. The headline result: <b>no single architecture dominates</b>, and prediction difficulty grows with material heterogeneity and crack-path sensitivity. The datasets, evaluation protocols and model code are released openly.</p>
+      </div>
+
+      <div class="ds-grid">
+        <div class="box">
+          <h3>Dataset 1 : Perforated plate of hyperelastic material</h3>
+          <img src="https://raw.githubusercontent.com/Centrum-IntelliPhysics/Benchmark-Data--Phase-field-fracture-in-hyperelastic-material/main/animations/phase_and_disp_evolution_sample1.gif" alt="Animation of crack growth and displacement in a Dataset 1 simulation">
+          <ul>
+            <li><b>Formulation:</b> phase-field fracture, AT2 model</li>
+            <li><b>Domain:</b> Ω = [−1.1, 1.1]² square plate, central hole r = 0.5, eight notches · grid 128 × 128</li>
+            <li><b>Loading:</b> boundary displacement u = ε̄<sub>n</sub> f(s) x on ∂Ω, with f a periodic Gaussian random field · 44 load steps</li>
+            <li><b>Operator:</b> 𝒢 : u(x,0) ↦ d(x,t), t ∈ {t<sub>1</sub>,…,t<sub>44</sub>}</li>
+            <li><b>Phase field:</b> <i>vector</i> d(x,t) ∈ ℝ² (after Hakimzadeh et al.); the scalar damage ‖d‖ ∈ [0,1] is shown</li>
+            <li><b>Size:</b> 1,000 simulations · train / test = 900 / 100</li>
+          </ul>
+          <ul class="ticks">
+            <li>Download the full dataset from the <a href="https://doi.org/10.7281/T1XFF19O" target="_blank" rel="noopener">JHU Data Archive</a>.</li>
+            <li>Get the simulation and data-generation code from the <a href="https://github.com/Centrum-IntelliPhysics/Benchmark-Data--Phase-field-fracture-in-hyperelastic-material" target="_blank" rel="noopener">GitHub repository</a>.</li>
+            <li>See how the crack path changes with the boundary load: <button class="link-button" type="button" data-goto="dataset1">open the Dataset 1 tab →</button></li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>Dataset 2 : Heterogeneous plate with two inclusions</h3>
+          <img src="https://raw.githubusercontent.com/Centrum-IntelliPhysics/Benchmark_Data_Phase_field_fracture_in_fgm/main/figure/1_animation.gif" alt="Animation of a crack growing between two inclusions in a Dataset 2 simulation">
+          <ul>
+            <li><b>Formulation:</b> phase-field fracture, PF-CZM model</li>
+            <li><b>Domain:</b> 4 mm × 8 mm plate · two circular inclusions · grid 128 × 256</li>
+            <li><b>Material:</b> modulus field E(x); each inclusion stiffer (E = 10 E<sub>m</sub>) or softer (E = 0.1 E<sub>m</sub>) than the matrix</li>
+            <li><b>Loading:</b> Mode-I tension, 31 load steps</li>
+            <li><b>Operator:</b> 𝒢 : (d(x,0), E(x)) ↦ d(x,t<sub>f</sub>)</li>
+            <li><b>Phase field:</b> <i>scalar</i> d ∈ [0,1] (0 = intact, 1 = fully cracked); only the final step t<sub>f</sub> is predicted</li>
+            <li><b>Size:</b> 4,000 simulations (4 inclusion configurations) · train / test = 3,600 / 400</li>
+          </ul>
+          <ul class="ticks">
+            <li>Download the full dataset from the <a href="https://doi.org/10.7281/T1RZFI3I" target="_blank" rel="noopener">JHU Data Archive</a>.</li>
+            <li>Get the adaptive-mesh simulation and data-generation code from the <a href="https://github.com/Centrum-IntelliPhysics/Benchmark_Data_Phase_field_fracture_in_fgm" target="_blank" rel="noopener">GitHub repository</a>.</li>
+            <li>See how the crack path bends around the inclusions: <button class="link-button" type="button" data-goto="dataset2">open the Dataset 2 tab →</button></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="box accent">
+        <h3>Contributing &amp; contact</h3>
+        <p>Fracture-Bench is meant to grow as a community resource. If you would like to <b>contribute a new surrogate architecture</b>, or a new dataset or fracture problem, we would be glad to include it. Please reach out to any of us (the full team is listed on the <a href="./#team">home page</a>):</p>
+        <ul>
+          <li>Dr. U. Meenu Krishnan · <a href="mailto:ukrishn4@jh.edu">ukrishn4@jh.edu</a></li>
+          <li>Prof. Somdatta Goswami · <a href="mailto:somdatta@jhu.edu">somdatta@jhu.edu</a></li>
+          <li>Prof. Lori Graham-Brady · <a href="mailto:lori@jhu.edu">lori@jhu.edu</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================================================ Dataset 1 -->
+    <section id="panel-dataset1" role="tabpanel" aria-labelledby="tab-dataset1" hidden>
+      <div class="box">
+        Crack growth in a <b>perforated hyperelastic plate</b> (AT2) under a Gaussian-random-field boundary displacement.
+        <ul>
+          <li><b>Test case:</b> one of 10 held-out FEM simulations that the models never saw in training.</li>
+          <li><b>Surrogates:</b> compare FNO, DeepONet and Latent DeepONet at 11, 22 or 44 load steps.</li>
+          <li><b>Output:</b> the damage ‖d(x,t)‖ at each load step next to FEM, and the error |prediction − FEM| below. Press <b>Play</b> to watch the crack grow.</li>
+        </ul>
+      </div>
+      <div class="viewer" data-viewer="d1">
+        <div class="controls">
+          <h2>Input</h2>
+          <div class="field">
+            <label for="d1-sample">Held-out test case</label>
+            <select id="d1-sample"></select>
+          </div>
+          <figure class="input-figure field">
+            <img id="d1-input" alt="Initial displacement magnitude of the selected test case">
+            <figcaption>‖u(x, 0)‖, the initial displacement the models take as input</figcaption>
+          </figure>
+          <h2>Surrogates</h2>
+          <div class="field checks" id="d1-models"></div>
+          <div class="field">
+            <span class="label" id="d1-res-label">Temporal resolution (load steps)</span>
+            <div class="segmented" role="group" aria-labelledby="d1-res-label" id="d1-res">
+              <button type="button" data-n="11" aria-pressed="true">11</button>
+              <button type="button" data-n="22" aria-pressed="false">22</button>
+              <button type="button" data-n="44" aria-pressed="false">44</button>
+            </div>
+          </div>
+          <p class="hint">UNet and cDDPM will be added once their trained weights are released.</p>
+        </div>
+        <div class="output">
+          <div class="step-bar">
+            <button class="play" type="button" id="d1-play">▶ Play</button>
+            <input type="range" id="d1-step" min="1" max="11" value="11" aria-label="Load step">
+            <output id="d1-step-out" for="d1-step">Load step 11 / 11</output>
+          </div>
+          <p class="row-title">‖d(x, t)‖: prediction and FEM</p>
+          <div class="panels" id="d1-pred"></div>
+          <div class="hbar" id="d1-cb-phase"></div>
+          <p class="row-title">|prediction − FEM|</p>
+          <div class="panels" id="d1-err"></div>
+          <div class="hbar" id="d1-cb-err"></div>
+          <p class="hint">Predictions were computed once with the trained models. The error scale is capped at the 95th percentile of the errors at each load step. MSE is the mean squared error of ‖d‖ at the shown step, outside the hole. The 11- and 22-step FNO models are re-runs that saved their spectral weights, and the 44-step DeepONet comes from a supplementary run (in the paper, that configuration did not reach the error threshold).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ Dataset 2 -->
+    <section id="panel-dataset2" role="tabpanel" aria-labelledby="tab-dataset2" hidden>
+      <div class="box">
+        The final crack pattern in a <b>heterogeneous plate with two circular inclusions</b> (PF-CZM) under Mode-I tension.
+        <ul>
+          <li><b>Test case:</b> one of 10 held-out FEM simulations covering all four inclusion configurations.</li>
+          <li><b>Surrogates:</b> compare FNO, DeepONet and Latent DeepONet.</li>
+          <li><b>Output:</b> the phase field d(x,t<sub>f</sub>) at the final load step next to FEM, and the error |prediction − FEM| below.</li>
+        </ul>
+      </div>
+      <div class="viewer d2" data-viewer="d2">
+        <div class="controls">
+          <h2>Input</h2>
+          <div class="field">
+            <label for="d2-sample">Held-out test case</label>
+            <select id="d2-sample"></select>
+          </div>
+          <figure class="input-figure field">
+            <img id="d2-input" alt="Inclusions and initial crack of the selected test case">
+            <figcaption>Inclusions and the initial crack d(x, 0)</figcaption>
+            <ul class="legend">
+              <li><span class="swatch" style="background:#8CB87C"></span><span>stiffer inclusion (10 E<sub>m</sub>)</span></li>
+              <li><span class="swatch" style="background:#2F6B3C"></span><span>softer inclusion (0.1 E<sub>m</sub>)</span></li>
+              <li><span class="swatch" style="background:#4B2273"></span><span>initial crack</span></li>
+            </ul>
+          </figure>
+          <h2>Surrogates</h2>
+          <div class="field checks" id="d2-models"></div>
+          <p class="hint">UNet and cDDPM will be added once their trained weights are released.</p>
+        </div>
+        <div class="output">
+          <p class="row-title">d(x, t<sub>f</sub>): prediction and FEM</p>
+          <div class="panels" id="d2-pred"></div>
+          <div class="hbar" id="d2-cb-phase"></div>
+          <p class="row-title">|prediction − FEM|</p>
+          <div class="panels" id="d2-err"></div>
+          <div class="hbar" id="d2-cb-err"></div>
+          <p class="hint">Predictions were computed once with the trained models. The error scale is capped at the 95th percentile of the errors. MSE is the mean squared error of d over the whole plate.</p>
+        </div>
+      </div>
+    </section>
+
+    <noscript><p class="empty">The playground needs JavaScript to show the test cases.</p></noscript>
+  </main>
+
+  <footer class="footer" id="contact">
+    <div class="wrap footer-inner">
+      <div>
+        <strong>Fracture-Bench</strong>
+        <p>Open benchmarks for phase-field fracture surrogates.</p>
+      </div>
+      <div>
+        <p>Questions or contributions? Write to us:</p>
+        <p><a href="mailto:ukrishn4@jh.edu">ukrishn4@jh.edu</a> · <a href="mailto:somdatta@jhu.edu">somdatta@jhu.edu</a> · <a href="mailto:lori@jhu.edu">lori@jhu.edu</a></p>
+        <p>Johns Hopkins University · IntelliPhysics Lab</p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
