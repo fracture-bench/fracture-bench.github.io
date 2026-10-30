@@ -12,6 +12,7 @@
   <link rel="stylesheet" href="assets/style.css">
   <script src="assets/site.js" defer></script>
   <script src="assets/viewer.js" defer></script>
+  <script src="assets/live.js" defer></script>
 </head>
 <body>
   <header class="site-nav">
@@ -32,12 +33,12 @@
     <div class="wrap-narrow">
       <p class="kicker">Fracture-Bench</p>
       <h1>About the datasets &amp; playground</h1>
-      <p class="page-sub">Pick a test case · Compare surrogates · Inspect FEM error</p>
+      <p class="page-sub">Pick a test case · Compare surrogates · Inspect FEM error · Try your own case</p>
     </div>
   </section>
 
   <main class="wrap-narrow">
-    <p class="pg-copy">Choose a dataset and one of its held-out test cases, then compare the trained surrogates side by side with the finite-element (FEM) result and a <strong>pixel-wise error map</strong>.</p>
+    <p class="pg-copy">Choose a dataset and one of its held-out test cases, then compare the trained surrogates side by side with the finite-element (FEM) result and a <strong>pixel-wise error map</strong>. Or set up a <strong>new case</strong> of your own: DeepONet then runs live in your browser.</p>
 
     <div class="tabs" role="tablist" aria-label="Playground sections">
       <button class="tab" role="tab" id="tab-overview" aria-controls="panel-overview" data-tab="overview">Overview</button>
@@ -110,9 +111,72 @@
           <li><b>Test case:</b> one of 10 held-out FEM simulations that the models never saw in training.</li>
           <li><b>Surrogates:</b> compare FNO, DeepONet and Latent DeepONet at 11, 22 or 44 load steps.</li>
           <li><b>Output:</b> the damage ‖d(x,t)‖ at each load step next to FEM, and the error |prediction − FEM| below. Press <b>Play</b> to watch the crack grow.</li>
+          <li><b>New load:</b> switch the input to <b>New load (live)</b> to draw your own boundary load. DeepONet then predicts the crack growth in your browser.</li>
         </ul>
       </div>
-      <div class="viewer" data-viewer="d1">
+      <div class="mode-bar">
+        <span class="label" id="d1-mode-label">Input</span>
+        <div class="segmented" role="group" aria-labelledby="d1-mode-label" data-modes="d1">
+          <button type="button" data-v="test" aria-pressed="true">Held-out test case</button>
+          <button type="button" data-v="live" aria-pressed="false">New load (live)</button>
+        </div>
+      </div>
+      <div class="viewer live" id="d1-live" hidden>
+        <div class="controls">
+          <h2>Boundary load</h2>
+          <p class="hint formula">A new load from the Gaussian random field of the FEM data generator:<br>
+            f(s) = μ + Σ<sub>n</sub> λ<sub>n</sub> [ξ<sub>n</sub> cos nφ + η<sub>n</sub> sin nφ], λ<sub>n</sub> = √2 σ ((2πn)² + τ²)<sup>−γ/2</sup></p>
+          <div class="field">
+            <label for="d1l-seed">Random seed (ξ<sub>n</sub>, η<sub>n</sub>)</label>
+            <div class="seed-row">
+              <input type="number" id="d1l-seed" min="0" max="99999" step="1" value="42">
+              <button type="button" class="ghost" id="d1l-dice">New random load</button>
+            </div>
+          </div>
+          <div class="field params">
+            <label>γ, smoothness <input type="number" id="d1l-gamma" min="1" max="8" step="0.5" value="4"></label>
+            <label>τ, inverse length scale <input type="number" id="d1l-tau" min="0.5" max="20" step="0.5" value="5"></label>
+            <label>σ, amplitude <input type="number" id="d1l-sigma" min="1" max="2000" step="25" value="625"></label>
+            <label>μ, mean load level <input type="number" id="d1l-mean" min="0.3" max="3" step="0.05" value="1"></label>
+          </div>
+          <p class="hint">The training data used γ = 4, τ = 5, σ = 625 and μ = 1. Other values give loads unlike any the model was trained on. <button class="link-button" type="button" id="d1l-reset">Reset</button></p>
+          <figure class="profile field">
+            <svg id="d1l-profile" viewBox="0 0 300 112" role="img" aria-label="Boundary load profile"></svg>
+            <figcaption>Load profile f(s) / mean</figcaption>
+          </figure>
+          <figure class="input-figure field">
+            <canvas id="d1l-input" width="128" height="128" role="img" aria-label="Initial displacement magnitude"></canvas>
+            <figcaption>‖u(x, 0)‖ from a linear-elastic solve of the first load step</figcaption>
+          </figure>
+          <h2>Surrogate</h2>
+          <p class="hint">DeepONet, running in your browser.</p>
+          <div class="field">
+            <span class="label" id="d1l-res-label">Temporal resolution (load steps)</span>
+            <div class="segmented" role="group" aria-labelledby="d1l-res-label" id="d1l-res">
+              <button type="button" data-v="11" aria-pressed="true">11</button>
+              <button type="button" data-v="22" aria-pressed="false">22</button>
+              <button type="button" data-v="44" aria-pressed="false">44</button>
+            </div>
+          </div>
+          <button class="run" type="button" id="d1l-run">Predict crack evolution</button>
+          <p class="status" id="d1l-status" role="status"></p>
+        </div>
+        <div class="output">
+          <div class="step-bar">
+            <button class="play" type="button" id="d1l-play">▶ Play</button>
+            <input type="range" id="d1l-step" min="1" max="11" value="11" aria-label="Load step">
+            <output id="d1l-step-out" for="d1l-step">Load step – / –</output>
+          </div>
+          <p class="row-title">‖d(x, t)‖: DeepONet prediction</p>
+          <div class="live-frame" id="d1l-frame">
+            <canvas id="d1l-pred" width="128" height="128" role="img" aria-label="DeepONet prediction"></canvas>
+            <p class="placeholder" id="d1l-placeholder"><span>Press <b>Predict crack evolution</b> to run DeepONet on this load.</span></p>
+          </div>
+          <div class="hbar" id="d1l-cb"></div>
+          <p class="hint">DeepONet runs on your computer with the trained weights, which are downloaded once (12–20 MB). A prediction takes a few seconds on a laptop. A new load has no FEM result, so there is no error map. FNO and Latent DeepONet have much larger weights (185 MB to 1.2 GB), so they are shown for the held-out test cases only. The 44-step DeepONet comes from a supplementary run.</p>
+        </div>
+      </div>
+      <div class="viewer" id="d1-test" data-viewer="d1">
         <div class="controls">
           <h2>Input</h2>
           <div class="field">
@@ -160,9 +224,66 @@
           <li><b>Test case:</b> one of 10 held-out FEM simulations covering all four inclusion configurations.</li>
           <li><b>Surrogates:</b> compare FNO, DeepONet and Latent DeepONet.</li>
           <li><b>Output:</b> the phase field d(x,t<sub>f</sub>) at the final load step next to FEM, and the error |prediction − FEM| below.</li>
+          <li><b>Your own setup:</b> switch the input to <b>Custom setup (live)</b> to choose the inclusions and place the initial crack. DeepONet then predicts the final crack in your browser.</li>
         </ul>
       </div>
-      <div class="viewer d2" data-viewer="d2">
+      <div class="mode-bar">
+        <span class="label" id="d2-mode-label">Input</span>
+        <div class="segmented" role="group" aria-labelledby="d2-mode-label" data-modes="d2">
+          <button type="button" data-v="test" aria-pressed="true">Held-out test case</button>
+          <button type="button" data-v="live" aria-pressed="false">Custom setup (live)</button>
+        </div>
+      </div>
+      <div class="viewer d2 live" id="d2-live" hidden>
+        <div class="controls">
+          <h2>Inclusions</h2>
+          <div class="field">
+            <span class="label" id="d2l-upper-label">Upper inclusion (2 mm diameter)</span>
+            <div class="segmented" role="group" aria-labelledby="d2l-upper-label" id="d2l-upper">
+              <button type="button" data-v="1" aria-pressed="false">Stiffer (10 E<sub>m</sub>)</button>
+              <button type="button" data-v="0" aria-pressed="true">Softer (0.1 E<sub>m</sub>)</button>
+            </div>
+          </div>
+          <div class="field">
+            <span class="label" id="d2l-lower-label">Lower inclusion (3 mm diameter)</span>
+            <div class="segmented" role="group" aria-labelledby="d2l-lower-label" id="d2l-lower">
+              <button type="button" data-v="1" aria-pressed="true">Stiffer (10 E<sub>m</sub>)</button>
+              <button type="button" data-v="0" aria-pressed="false">Softer (0.1 E<sub>m</sub>)</button>
+            </div>
+          </div>
+          <h2>Initial crack tip</h2>
+          <div class="field range-field">
+            <label for="d2l-tx">Tip x <output id="d2l-tx-out" for="d2l-tx"></output></label>
+            <input type="range" id="d2l-tx" step="1">
+          </div>
+          <div class="field range-field">
+            <label for="d2l-ty">Tip y <output id="d2l-ty-out" for="d2l-ty"></output></label>
+            <input type="range" id="d2l-ty" step="1">
+          </div>
+          <p class="hint">The tip can be placed where the training cracks started. You can also click on the plate below.</p>
+          <figure class="input-figure field">
+            <canvas id="d2l-input" width="128" height="256" role="img" aria-label="Inclusions and initial crack"></canvas>
+            <figcaption>Inclusions and the initial crack d(x, 0)</figcaption>
+            <ul class="legend">
+              <li><span class="swatch" style="background:#8CB87C"></span><span>stiffer inclusion (10 E<sub>m</sub>)</span></li>
+              <li><span class="swatch" style="background:#2F6B3C"></span><span>softer inclusion (0.1 E<sub>m</sub>)</span></li>
+              <li><span class="swatch" style="background:#4B2273"></span><span>initial crack</span></li>
+            </ul>
+          </figure>
+          <button class="run" type="button" id="d2l-run">Predict final crack path</button>
+          <p class="status" id="d2l-status" role="status"></p>
+        </div>
+        <div class="output">
+          <p class="row-title">d(x, t<sub>f</sub>): DeepONet prediction</p>
+          <div class="live-frame" id="d2l-frame">
+            <canvas id="d2l-pred" width="128" height="256" role="img" aria-label="DeepONet prediction"></canvas>
+            <p class="placeholder" id="d2l-placeholder"><span>Press <b>Predict final crack path</b> to run DeepONet on this setup.</span></p>
+          </div>
+          <div class="hbar" id="d2l-cb"></div>
+          <p class="hint">DeepONet runs on your computer with the trained weights, which are downloaded once (24 MB). The first prediction takes a few seconds; after that, the result updates as you change the setup. A custom setup has no FEM result, so there is no error map. FNO and Latent DeepONet have much larger weights (144 MB and 277 MB), so they are shown for the held-out test cases only.</p>
+        </div>
+      </div>
+      <div class="viewer d2" id="d2-test" data-viewer="d2">
         <div class="controls">
           <h2>Input</h2>
           <div class="field">
