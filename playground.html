@@ -38,13 +38,12 @@
   </section>
 
   <main class="wrap-narrow">
-    <p class="pg-copy">Choose a dataset and one of its held-out test cases, then compare the trained surrogates side by side with the finite-element (FEM) result and a <strong>pixel-wise error map</strong>. Or set up a <strong>new case</strong> of your own: DeepONet then runs live in your browser.</p>
+    <p class="pg-copy">Choose a dataset and one of its held-out test cases, then compare the trained surrogates side by side with the finite-element (FEM) result and a <strong>pixel-wise error map</strong>. Or set up a <strong>new case</strong> of your own: the surrogates then run live in your browser.</p>
 
     <div class="tabs" role="tablist" aria-label="Playground sections">
       <button class="tab" role="tab" id="tab-overview" aria-controls="panel-overview" data-tab="overview">Overview</button>
       <button class="tab" role="tab" id="tab-dataset1" aria-controls="panel-dataset1" data-tab="dataset1">Dataset 1 : Perforated plate of hyperelastic material</button>
       <button class="tab" role="tab" id="tab-dataset2" aria-controls="panel-dataset2" data-tab="dataset2">Dataset 2 : Heterogeneous plate with two inclusions</button>
-      <button class="tab" role="tab" id="tab-server" aria-controls="panel-server" data-tab="server" data-needs="space">All models, live</button>
     </div>
 
     <!-- ============================================================ Overview -->
@@ -112,7 +111,7 @@
           <li><b>Test case:</b> one of 10 held-out FEM simulations that the models never saw in training.</li>
           <li><b>Surrogates:</b> compare FNO, DeepONet and Latent DeepONet at 11, 22 or 44 load steps.</li>
           <li><b>Output:</b> the damage ‖d(x,t)‖ at each load step next to FEM, and the error |prediction − FEM| below. Press <b>Play</b> to watch the crack grow.</li>
-          <li><b>New load:</b> switch the input to <b>New load (live)</b> to draw your own boundary load. DeepONet then predicts the crack growth in your browser.</li>
+          <li><b>New load:</b> switch the input to <b>New load (live)</b> to draw your own boundary load. DeepONet and Latent DeepONet then predict the crack growth in your browser.</li>
         </ul>
       </div>
       <div class="mode-bar">
@@ -149,8 +148,9 @@
             <canvas id="d1l-input" width="128" height="128" role="img" aria-label="Initial displacement magnitude"></canvas>
             <figcaption>‖u(x, 0)‖ from a linear-elastic solve of the first load step</figcaption>
           </figure>
-          <h2>Surrogate</h2>
-          <p class="hint">DeepONet, running in your browser.</p>
+          <h2>Surrogates</h2>
+          <div class="field checks" id="d1l-models"></div>
+          <p class="hint">FNO is not offered here: its Dataset 1 models (1.2 GB each) are too large for a browser. Compare it on the held-out test cases.</p>
           <div class="field">
             <span class="label" id="d1l-res-label">Temporal resolution (load steps)</span>
             <div class="segmented" role="group" aria-labelledby="d1l-res-label" id="d1l-res">
@@ -168,13 +168,12 @@
             <input type="range" id="d1l-step" min="1" max="11" value="11" aria-label="Load step">
             <output id="d1l-step-out" for="d1l-step">Load step – / –</output>
           </div>
-          <p class="row-title">‖d(x, t)‖: DeepONet prediction</p>
-          <div class="live-frame" id="d1l-frame">
-            <canvas id="d1l-pred" width="128" height="128" role="img" aria-label="DeepONet prediction"></canvas>
-            <p class="placeholder" id="d1l-placeholder"><span>Press <b>Predict crack evolution</b> to run DeepONet on this load.</span></p>
+          <p class="row-title">‖d(x, t)‖: predictions</p>
+          <div class="panels live-panels" id="d1l-panels">
+            <p class="empty">Choose the surrogates and press <b>Predict crack evolution</b>.</p>
           </div>
           <div class="hbar" id="d1l-cb"></div>
-          <p class="hint">DeepONet runs on your computer with the trained weights, which are downloaded once (12–20 MB). A prediction takes a few seconds on a laptop. A new load has no FEM result, so there is no error map. FNO and Latent DeepONet have much larger weights (185 MB to 1.2 GB), so they are shown for the held-out test cases only<span data-needs="space">, or you can run all three in the <button class="link-button" type="button" data-goto="server">All models, live</button> tab</span>. The 44-step DeepONet comes from a supplementary run.</p>
+          <p class="hint">The models run on your computer with the trained weights. Each model is downloaded once; its size is shown next to its name. A prediction takes about a second on a laptop, a little longer at 44 load steps. A new load has no FEM result, so there is no error map. The 44-step DeepONet comes from a supplementary run.</p>
         </div>
       </div>
       <div class="viewer" id="d1-test" data-viewer="d1">
@@ -225,7 +224,7 @@
           <li><b>Test case:</b> one of 10 held-out FEM simulations covering all four inclusion configurations.</li>
           <li><b>Surrogates:</b> compare FNO, DeepONet and Latent DeepONet.</li>
           <li><b>Output:</b> the phase field d(x,t<sub>f</sub>) at the final load step next to FEM, and the error |prediction − FEM| below.</li>
-          <li><b>Your own setup:</b> switch the input to <b>Custom setup (live)</b> to choose the inclusions and place the initial crack. DeepONet then predicts the final crack in your browser.</li>
+          <li><b>Your own setup:</b> switch the input to <b>Custom setup (live)</b> to choose the inclusions and place the initial crack. FNO, DeepONet and Latent DeepONet then predict the final crack in your browser.</li>
         </ul>
       </div>
       <div class="mode-bar">
@@ -271,17 +270,18 @@
               <li><span class="swatch" style="background:#4B2273"></span><span>initial crack</span></li>
             </ul>
           </figure>
+          <h2>Surrogates</h2>
+          <div class="field checks" id="d2l-models"></div>
           <button class="run" type="button" id="d2l-run">Predict final crack path</button>
           <p class="status" id="d2l-status" role="status"></p>
         </div>
         <div class="output">
-          <p class="row-title">d(x, t<sub>f</sub>): DeepONet prediction</p>
-          <div class="live-frame" id="d2l-frame">
-            <canvas id="d2l-pred" width="128" height="256" role="img" aria-label="DeepONet prediction"></canvas>
-            <p class="placeholder" id="d2l-placeholder"><span>Press <b>Predict final crack path</b> to run DeepONet on this setup.</span></p>
+          <p class="row-title">d(x, t<sub>f</sub>): predictions</p>
+          <div class="panels live-panels" id="d2l-panels">
+            <p class="empty">Choose the surrogates and press <b>Predict final crack path</b>.</p>
           </div>
           <div class="hbar" id="d2l-cb"></div>
-          <p class="hint">DeepONet runs on your computer with the trained weights, which are downloaded once (24 MB). The first prediction takes a few seconds; after that, the result updates as you change the setup. A custom setup has no FEM result, so there is no error map. FNO and Latent DeepONet have much larger weights (144 MB and 277 MB), so they are shown for the held-out test cases only<span data-needs="space">, or you can run all three in the <button class="link-button" type="button" data-goto="server">All models, live</button> tab</span>.</p>
+          <p class="hint">The models run on your computer with the trained weights. Each model is downloaded once; its size is shown next to its name. The first prediction takes a few seconds; after that, the result updates as you change the setup. A custom setup has no FEM result, so there is no error map.</p>
         </div>
       </div>
       <div class="viewer d2" id="d2-test" data-viewer="d2">
@@ -314,22 +314,6 @@
           <p class="hint">Predictions were computed once with the trained models. The error scale is capped at the 95th percentile of the errors. MSE is the mean squared error of d over the whole plate.</p>
         </div>
       </div>
-    </section>
-
-    <!-- ============================================================ All models, live -->
-    <section id="panel-server" role="tabpanel" aria-labelledby="tab-server" data-needs="space" hidden>
-      <div class="box">
-        Run <b>all three surrogates</b> (FNO, DeepONet and Latent DeepONet) on either dataset, on a held-out test case or on a case you set up. This version of the playground runs the trained models in Python on a free Hugging Face server.
-        <ul>
-          <li><b>Waking up:</b> the server sleeps when nobody has used it for a while. The first visit after that takes a minute or two while it starts.</li>
-          <li><b>Speed:</b> the server has no graphics card, so a prediction takes a few seconds. FNO at 44 load steps takes longest.</li>
-        </ul>
-      </div>
-      <div class="server-start">
-        <button class="run" type="button" id="server-load">Start the live app</button>
-        <a class="ghost" data-space-link href="#" target="_blank" rel="noopener">Open in a new tab ↗</a>
-      </div>
-      <div class="server-frame" id="server-frame" hidden></div>
     </section>
 
     <noscript><p class="empty">The playground needs JavaScript to show the test cases.</p></noscript>

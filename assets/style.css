@@ -363,23 +363,13 @@ input[type="number"] {
 .profile figcaption { font-size: .8rem; color: var(--muted); margin-top: .35rem; }
 .input-figure canvas { display: block; width: 100%; max-width: 220px; aspect-ratio: 1; border: 1px solid var(--border); border-radius: 6px; background: #FFFFFF; }
 .d2 .input-figure canvas { aspect-ratio: 1 / 2; max-width: 160px; cursor: crosshair; }
-.live-frame { position: relative; max-width: 420px; }
-.d2 .live-frame { max-width: 220px; }
-.live-frame canvas { display: block; width: 100%; aspect-ratio: 1; border: 1px solid var(--border); border-radius: 6px; background: #FFFFFF; transition: opacity .2s ease; }
-.d2 .live-frame canvas { aspect-ratio: 1 / 2; }
-.live-frame.stale canvas { opacity: .45; }
-.live-frame .placeholder {
-  position: absolute; inset: 0; margin: 0;
-  display: grid; place-items: center; padding: 1.2rem;
-  text-align: center; font-size: .85rem; color: var(--muted);
-}
+/* live result panels: one canvas per model */
+.live-panels .panel canvas { display: block; width: 100%; aspect-ratio: 1; border: 1px solid var(--border); border-radius: 6px; background: #FFFFFF; transition: opacity .2s ease; }
+.d2 .live-panels .panel canvas { aspect-ratio: 1 / 2; }
+.live-panels.stale canvas { opacity: .45; }
+.live-panels .empty { grid-column: 1 / -1; }
+.checks small { color: var(--muted); font-size: .8rem; }
 .live .output > .hint { max-width: 640px; }
-
-/* ---------------------------------------------------------------- all models, live (Hugging Face) */
-.server-start { display: flex; flex-wrap: wrap; align-items: center; gap: .8rem; margin: 0 0 1rem; }
-.server-start .run { width: auto; margin: 0; padding: .7rem 1.6rem; }
-.server-start .ghost { text-decoration: none; padding: .62rem 1.1rem; }
-.server-frame iframe { display: block; width: 100%; height: 1500px; border: 1px solid var(--border); border-radius: 12px; background: #FFFFFF; }
 
 /* ---------------------------------------------------------------- footer */
 .footer { margin-top: 4rem; border-top: 1px solid var(--border); padding: 2rem 0 2.4rem; color: var(--muted); }
