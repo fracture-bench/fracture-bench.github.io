@@ -2,7 +2,7 @@
 const LINKS = {
   paper: "",   // preprint or journal page
   code: "https://github.com/Centrum-IntelliPhysics/fracture_bench",  // GitHub repository with the training code
-  models: "",  // public share link of the folder with the trained weights
+  models: "https://huggingface.co/fracture-bench/weights/tree/main/Fracture-Bench-weights",  // trained weights
   poster: "",  // poster PDF, e.g. "assets/Fracture-Bench_poster.pdf"
 };
 
