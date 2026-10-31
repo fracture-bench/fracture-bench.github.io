@@ -357,7 +357,7 @@ input[type="number"] {
 .run.attention { box-shadow: 0 0 0 4px rgba(36,94,148,.3); }
 .status { font-size: .8rem; color: var(--muted); min-height: 1.3em; margin: .6rem 0 0; }
 .status.error { color: #B42318; }
-.profile { margin: 0; }
+.profile { margin: 0; max-width: 360px; }
 .profile svg { display: block; width: 100%; height: auto; border: 1px solid var(--border); border-radius: 6px; background: #FFFFFF; }
 .profile text { font-size: 9px; fill: var(--muted); font-family: inherit; }
 .profile figcaption { font-size: .8rem; color: var(--muted); margin-top: .35rem; }
