@@ -1,8 +1,8 @@
-// Public links. While a value is empty, its card shows "Coming soon".
+// Public links. While a value is empty, its button reads "Coming soon".
 const LINKS = {
   paper: "",   // preprint or journal page
   code: "https://github.com/Centrum-IntelliPhysics/fracture_bench",  // GitHub repository with the training code
-  models: "",  // Google Drive folder with the trained weights
+  models: "",  // public share link of the folder with the trained weights
   poster: "",  // poster PDF, e.g. "assets/Fracture-Bench_poster.pdf"
 };
 
@@ -22,9 +22,5 @@ document.querySelectorAll("[data-link]").forEach((el) => {
   el.removeAttribute("href");
   el.classList.add("is-soon");
   el.setAttribute("aria-disabled", "true");
-  el.setAttribute("aria-label", (el.getAttribute("aria-label") || "") + ", coming soon");
-  const tag = document.createElement("span");
-  tag.className = "soon-tag";
-  tag.textContent = "Coming soon";
-  el.prepend(tag);
+  el.textContent = "Coming soon";
 });

@@ -49,72 +49,68 @@
         <p class="basics-copy">Fracture-Bench brings neural surrogate models to phase-field fracture simulation. It compares operator-learning and generative architectures on shared data splits and evaluation metrics across two high-fidelity datasets. The playground shows their predictions next to the finite-element results, so the differences between architectures can be explored directly, and it runs DeepONet live in your browser on a case you set up yourself. You can find the project resources below:</p>
 
         <div class="project-grid" id="resources">
-          <a class="card paper-card" data-link="paper" aria-label="Paper" href="#">
-            <div class="paper-sheet">
-              <b>Fracture-Bench: A Controlled Benchmark Suite for Machine Learning Surrogates in Phase-Field Fracture Mechanics</b>
-              <i>Meenu Krishnan U. · M. Hakimzadeh · I. Saha · M. M. Rashid · L. Graham-Brady · S. Goswami</i>
-              <div class="paper-lines"></div>
+          <article class="card">
+            <div>
+              <h3>Paper</h3>
+              <p>Fracture-Bench: a controlled benchmark suite for machine-learning surrogates in phase-field fracture mechanics.</p>
             </div>
-            <span class="card-title">Paper</span>
-          </a>
-
-          <div class="card code-card">
-            <div class="code-snippet" aria-hidden="true"><span class="kw">import</span> numpy <span class="kw">as</span> np
-
-<span class="cm"># Dataset 2, inclusion case 1</span>
-data = np.<span class="fn">load</span>("train_case1.npz")
-
-d = data["phase_field"]
-u = data["displacement_field"]
-E = data["e_field"]</div>
-            <div class="card-foot">
-              <span class="card-title">Code</span>
-              <div class="card-links">
-                <a data-link="code" data-optional href="#">Training code · GitHub ↗</a>
-                <a href="https://github.com/Centrum-IntelliPhysics/Benchmark-Data--Phase-field-fracture-in-hyperelastic-material" target="_blank" rel="noopener">Dataset 1 · GitHub ↗</a>
-                <a href="https://github.com/Centrum-IntelliPhysics/Benchmark_Data_Phase_field_fracture_in_fgm" target="_blank" rel="noopener">Dataset 2 · GitHub ↗</a>
-              </div>
+            <div class="card-actions">
+              <a class="card-btn" data-link="paper" href="#">Read the paper ↗</a>
             </div>
-          </div>
+          </article>
 
-          <a class="card dataset-card" href="playground.html">
-            <span class="card-title">About the datasets &amp; playground</span>
-          </a>
-
-          <div class="card files-card">
-            <div class="file-grid" aria-hidden="true"><i>NPZ</i><i>H5</i><i>CSV</i><i>NPZ</i><i>XDMF</i><i>H5</i></div>
-            <div class="card-foot">
-              <span class="card-title">Download the datasets</span>
-              <div class="card-links">
-                <a href="https://doi.org/10.7281/T1XFF19O" target="_blank" rel="noopener">Dataset 1 · JHU archive ↗</a>
-                <a href="https://doi.org/10.7281/T1RZFI3I" target="_blank" rel="noopener">Dataset 2 · JHU archive ↗</a>
-              </div>
+          <article class="card">
+            <div>
+              <h3>Code</h3>
+              <p>Training code for FNO, DeepONet and Latent DeepONet, and the simulation code behind both datasets.</p>
             </div>
-          </div>
-
-          <a class="card model-card" data-link="models" aria-label="Download trained models" href="#">
-            <svg viewBox="0 0 360 260" aria-hidden="true">
-              <line x1="42" y1="48" x2="142" y2="30"/><line x1="42" y1="48" x2="150" y2="130"/>
-              <line x1="42" y1="210" x2="150" y2="130"/><line x1="42" y1="210" x2="142" y2="230"/>
-              <line x1="142" y1="30" x2="260" y2="70"/><line x1="142" y1="30" x2="150" y2="130"/>
-              <line x1="150" y1="130" x2="260" y2="70"/><line x1="150" y1="130" x2="270" y2="190"/>
-              <line x1="142" y1="230" x2="270" y2="190"/><line x1="260" y1="70" x2="326" y2="130"/>
-              <line x1="270" y1="190" x2="326" y2="130"/>
-              <circle cx="42" cy="48" r="22"/><circle cx="42" cy="210" r="22"/>
-              <circle cx="142" cy="30" r="22"/><circle cx="150" cy="130" r="22"/><circle cx="142" cy="230" r="22"/>
-              <circle cx="260" cy="70" r="22"/><circle cx="270" cy="190" r="22"/><circle cx="326" cy="130" r="22"/>
-            </svg>
-            <span class="card-title">Download trained models</span>
-          </a>
-
-          <a class="card poster-card" data-link="poster" aria-label="Benchmark poster" href="#">
-            <div class="poster-mock" aria-hidden="true">
-              <div class="pm-head">FRACTURE-BENCH</div>
-              <div class="pm-grid"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="card-actions">
+              <a class="card-btn" data-link="code" data-optional href="#">Training code ↗</a>
+              <a class="card-btn" href="https://github.com/Centrum-IntelliPhysics/Benchmark-Data--Phase-field-fracture-in-hyperelastic-material" target="_blank" rel="noopener">Dataset 1 ↗</a>
+              <a class="card-btn" href="https://github.com/Centrum-IntelliPhysics/Benchmark_Data_Phase_field_fracture_in_fgm" target="_blank" rel="noopener">Dataset 2 ↗</a>
             </div>
-            <span class="card-title">Benchmark poster</span>
-          </a>
+          </article>
 
+          <article class="card">
+            <div>
+              <h3>Playground</h3>
+              <p>Compare the surrogates with FEM on held-out test cases, or run DeepONet live on a case you set up.</p>
+            </div>
+            <div class="card-actions">
+              <a class="card-btn" href="playground.html">Explore now</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div>
+              <h3>Datasets</h3>
+              <p>5,000 high-fidelity phase-field simulations in two datasets, openly available in the JHU Data Archive.</p>
+            </div>
+            <div class="card-actions">
+              <a class="card-btn" href="https://doi.org/10.7281/T1XFF19O" target="_blank" rel="noopener">Dataset 1 ↗</a>
+              <a class="card-btn" href="https://doi.org/10.7281/T1RZFI3I" target="_blank" rel="noopener">Dataset 2 ↗</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div>
+              <h3>Trained models</h3>
+              <p>Weights of FNO, DeepONet and Latent DeepONet for both datasets, ready to load in JAX.</p>
+            </div>
+            <div class="card-actions">
+              <a class="card-btn" data-link="models" href="#">Download ↗</a>
+            </div>
+          </article>
+
+          <article class="card">
+            <div>
+              <h3>Benchmark poster</h3>
+              <p>The datasets, the surrogates and the main results of the benchmark on one page.</p>
+            </div>
+            <div class="card-actions">
+              <a class="card-btn" data-link="poster" href="#">View poster ↗</a>
+            </div>
+          </article>
         </div>
       </div>
     </section>
