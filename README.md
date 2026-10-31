@@ -15,6 +15,8 @@ The test-case predictions were computed once from the trained models and are sto
 
 `.nojekyll` tells GitHub Pages to serve the files as they are.
 
+The pages load `assets/*.js` and `assets/style.css` with a version tag, e.g. `assets/site.js?v=20261031`. After changing any of those files, change the tag in `index.html` and `playground.html` (to the date, say) so browsers fetch the new copies instead of old saved ones.
+
 ## Add the links
 
 The links for the paper, training code and trained models are at the top of `assets/site.js`:
