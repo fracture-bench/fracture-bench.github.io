@@ -4,6 +4,7 @@ const LINKS = {
   code: "https://github.com/Centrum-IntelliPhysics/fracture_bench",  // GitHub repository with the training code
   models: "",  // public share link of the folder with the trained weights
   poster: "",  // poster PDF, e.g. "assets/Fracture-Bench_poster.pdf"
+  space: "",   // Hugging Face Space running all models, e.g. "https://fracture-bench-playground.hf.space"
 };
 
 // ------------------------------------------------------------ links
@@ -24,3 +25,19 @@ document.querySelectorAll("[data-link]").forEach((el) => {
   el.setAttribute("aria-disabled", "true");
   el.textContent = "Coming soon";
 });
+
+// ------------------------------------------------------------ live app on Hugging Face
+// Without a Space link, the "All models, live" tab and the notes pointing to it are removed.
+document.querySelectorAll('[data-needs="space"]').forEach((el) => { if (!LINKS.space) el.remove(); });
+if (LINKS.space) {
+  const space = LINKS.space.replace(/\/$/, "");
+  document.querySelectorAll("[data-space-link]").forEach((a) => { a.href = space + "/"; });
+  const start = document.getElementById("server-load");
+  if (start) start.addEventListener("click", () => {
+    // loaded on request only, so visiting the page does not wake the server
+    const box = document.getElementById("server-frame");
+    box.innerHTML = `<iframe src="${space}/?view=embed&embed=true" title="Fracture-Bench live app with all models" allow="clipboard-write"></iframe>`;
+    box.hidden = false;
+    start.hidden = true;
+  });
+}

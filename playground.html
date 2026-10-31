@@ -44,6 +44,7 @@
       <button class="tab" role="tab" id="tab-overview" aria-controls="panel-overview" data-tab="overview">Overview</button>
       <button class="tab" role="tab" id="tab-dataset1" aria-controls="panel-dataset1" data-tab="dataset1">Dataset 1 : Perforated plate of hyperelastic material</button>
       <button class="tab" role="tab" id="tab-dataset2" aria-controls="panel-dataset2" data-tab="dataset2">Dataset 2 : Heterogeneous plate with two inclusions</button>
+      <button class="tab" role="tab" id="tab-server" aria-controls="panel-server" data-tab="server" data-needs="space">All models, live</button>
     </div>
 
     <!-- ============================================================ Overview -->
@@ -173,7 +174,7 @@
             <p class="placeholder" id="d1l-placeholder"><span>Press <b>Predict crack evolution</b> to run DeepONet on this load.</span></p>
           </div>
           <div class="hbar" id="d1l-cb"></div>
-          <p class="hint">DeepONet runs on your computer with the trained weights, which are downloaded once (12–20 MB). A prediction takes a few seconds on a laptop. A new load has no FEM result, so there is no error map. FNO and Latent DeepONet have much larger weights (185 MB to 1.2 GB), so they are shown for the held-out test cases only. The 44-step DeepONet comes from a supplementary run.</p>
+          <p class="hint">DeepONet runs on your computer with the trained weights, which are downloaded once (12–20 MB). A prediction takes a few seconds on a laptop. A new load has no FEM result, so there is no error map. FNO and Latent DeepONet have much larger weights (185 MB to 1.2 GB), so they are shown for the held-out test cases only<span data-needs="space">, or you can run all three in the <button class="link-button" type="button" data-goto="server">All models, live</button> tab</span>. The 44-step DeepONet comes from a supplementary run.</p>
         </div>
       </div>
       <div class="viewer" id="d1-test" data-viewer="d1">
@@ -280,7 +281,7 @@
             <p class="placeholder" id="d2l-placeholder"><span>Press <b>Predict final crack path</b> to run DeepONet on this setup.</span></p>
           </div>
           <div class="hbar" id="d2l-cb"></div>
-          <p class="hint">DeepONet runs on your computer with the trained weights, which are downloaded once (24 MB). The first prediction takes a few seconds; after that, the result updates as you change the setup. A custom setup has no FEM result, so there is no error map. FNO and Latent DeepONet have much larger weights (144 MB and 277 MB), so they are shown for the held-out test cases only.</p>
+          <p class="hint">DeepONet runs on your computer with the trained weights, which are downloaded once (24 MB). The first prediction takes a few seconds; after that, the result updates as you change the setup. A custom setup has no FEM result, so there is no error map. FNO and Latent DeepONet have much larger weights (144 MB and 277 MB), so they are shown for the held-out test cases only<span data-needs="space">, or you can run all three in the <button class="link-button" type="button" data-goto="server">All models, live</button> tab</span>.</p>
         </div>
       </div>
       <div class="viewer d2" id="d2-test" data-viewer="d2">
@@ -313,6 +314,22 @@
           <p class="hint">Predictions were computed once with the trained models. The error scale is capped at the 95th percentile of the errors. MSE is the mean squared error of d over the whole plate.</p>
         </div>
       </div>
+    </section>
+
+    <!-- ============================================================ All models, live -->
+    <section id="panel-server" role="tabpanel" aria-labelledby="tab-server" data-needs="space" hidden>
+      <div class="box">
+        Run <b>all three surrogates</b> (FNO, DeepONet and Latent DeepONet) on either dataset, on a held-out test case or on a case you set up. This version of the playground runs the trained models in Python on a free Hugging Face server.
+        <ul>
+          <li><b>Waking up:</b> the server sleeps when nobody has used it for a while. The first visit after that takes a minute or two while it starts.</li>
+          <li><b>Speed:</b> the server has no graphics card, so a prediction takes a few seconds. FNO at 44 load steps takes longest.</li>
+        </ul>
+      </div>
+      <div class="server-start">
+        <button class="run" type="button" id="server-load">Start the live app</button>
+        <a class="ghost" data-space-link href="#" target="_blank" rel="noopener">Open in a new tab ↗</a>
+      </div>
+      <div class="server-frame" id="server-frame" hidden></div>
     </section>
 
     <noscript><p class="empty">The playground needs JavaScript to show the test cases.</p></noscript>
